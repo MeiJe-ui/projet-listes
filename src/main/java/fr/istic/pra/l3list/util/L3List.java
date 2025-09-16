@@ -25,7 +25,7 @@ public class L3List<T> implements L3Collection<T>{
 	/**
 	 * Iterateur specifique au L3LinkedList
 	 */
-	public class L3ListIterator implements L3Iterator<T> {
+	private class L3ListIterator implements L3Iterator<T> {
 		private Element current;
 
 		/**

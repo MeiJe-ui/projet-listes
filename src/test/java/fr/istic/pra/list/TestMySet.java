@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import fr.istic.pra.benchmark.L3CollectionInteractions;
 import fr.istic.pra.l3list.MySet;
+import fr.istic.pra.lang.L3Iterator;
 // import fr.istic.pra.l3list.SmallSet; // a décommenter en partie 3.3
 // import fr.istic.pra.l3list.SubSet; // a décommenter en partie 3.2
 // import fr.istic.pra.l3list.util.L3List; // a décommenter en partie 3.2
@@ -36,8 +37,8 @@ public class TestMySet {
 	 * @return true si les ensembles l1 et l2 sont égaux, false sinon
 	 */
 	public static boolean compareMySets(MySet l1, MySet l2) {
-		L3List<SubSet>.L3ListIterator it1 = l1.l3Iterator();
-		L3List<SubSet>.L3ListIterator it2 = l2.l3Iterator();
+		L3Iterator<SubSet> it1 = l1.l3Iterator();
+		L3Iterator<SubSet> it2 = l2.l3Iterator();
 		boolean bool = true;
 		while (!it1.isOnFlag() && bool) {
 			SubSet s1 = it1.getValue();
@@ -64,7 +65,7 @@ public class TestMySet {
 	 * @return true si mySet est bien un ensemble creux
 	 */
 	public static boolean testSparsity(MySet mySet) {
-		L3List<SubSet>.L3ListIterator it = mySet.l3Iterator();
+		L3Iterator<SubSet> it = mySet.l3Iterator();
 		while (!it.isOnFlag() && it.getValue().getSet().size() != 0) {
 			it.goForward();
 		}
@@ -191,7 +192,7 @@ public class TestMySet {
 	@Test
 	public void testSize2() {
 		MySet mySet = new MySet();
-		mySet.l3Iterator().getValue().getSet().add(22);
+		((L3Iterator<SubSet>)mySet.l3Iterator()).getValue().getSet().add(22);
 		int size = mySet.size();
 		assertEquals(0, size);
 	}

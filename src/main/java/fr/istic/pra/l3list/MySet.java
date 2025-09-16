@@ -13,7 +13,7 @@ public class MySet extends L3List<SubSet>  {
 	 * Borne superieure pour les rangs des sous-ensembles.
 	 */
 	public static final int MAX_RANG = Integer.MAX_VALUE/SmallSet.SET_SIZE;
-	public L3ListIterator it;
+	public L3Iterator<SubSet> it;
 
 	/**
 	 * Créer un MySet comme étant une liste chainé avec un Subset qui sert de

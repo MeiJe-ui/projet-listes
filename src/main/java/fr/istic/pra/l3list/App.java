@@ -31,6 +31,7 @@ import fr.istic.pra.benchmark.BenchmarkAnyCollections;
 import fr.istic.pra.benchmark.BenchmarkAnyL3Collection;
 import fr.istic.pra.benchmark.BenchmarkData;
 import fr.istic.pra.benchmark.L3CollectionInteractions;
+import fr.istic.pra.lang.L3Iterator;
 import fr.istic.pra.list.util.L3List; // a commenter en partie 3.2
 // import fr.istic.pra.l3list.util.L3List; // a decommenter en partie 3.2
 import fr.istic.pra.list.SubSet;// a commenter en partie 3.2
@@ -116,10 +117,16 @@ public class App extends JFrame{
 		boxButtons.add(new InteractAndPlotButtons(ActionList.CONTAINS, "Appartient",
 				"determiner si x appartient a l'ensemble numero n1"));
 		boxButtons.add(new InteractAndPlotButtons(ActionList.SIZE, "Taille", "afficher le cardinal de l'ensemble numero n1"));
+		boxButtons.add(new InteractAndPlotButtons(ActionList.UNION, "Union",
+				"l'ensemble numero n1 <-- union de l'ensemble numero n1 et l'ensemble numero n2"));
 		boxButtons.add(new InteractAndPlotButtons(ActionList.INTERSECTION, "Intersection",
 				"l'ensemble numero n1 <-- intersection de l'ensemble numero n1 et l'ensemble numero n2"));
 		boxButtons.add(new InteractAndPlotButtons(ActionList.DIFFERENCE, "Difference",
 				"l'ensemble numero n1 <-- difference l'ensemble numero n1 et l'ensemble numero n2)"));
+		boxButtons.add(new InteractAndPlotButtons(ActionList.SYMDIFF, "Difference symetrique",
+				"l'ensemble numero n1 <-- difference symetrique de l'ensemble numero n1 et l'ensemble numero n2"));
+		boxButtons.add(new InteractAndPlotButtons(ActionList.EQUALS, "Egalité",
+				"determiner si l'ensemble numero n1 et l'ensemble numero n2 sont egaux"));
 		boxButtons.add(new InteractAndPlotButtons(ActionList.INCLUDE, "Inclus",
 				"determiner si l'ensemble numero n1 est inclus dans l'ensemble numero n2"));
 		boxButtons.add(new InteractAndPlotButtons(ActionList.RESET, "Reinitialiser",
@@ -161,7 +168,7 @@ public class App extends JFrame{
 
 	private String printMySetDetails(MySet currentSet) {
 		StringBuilder result = new StringBuilder();
-		L3List<SubSet>.L3ListIterator it = currentSet.l3Iterator();
+		L3Iterator<SubSet> it = currentSet.l3Iterator();
 		result.append("| ");
 		while (!it.isOnFlag()) {
 			result.append( it.getValue().getRank() + "->");
