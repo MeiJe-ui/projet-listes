@@ -33,21 +33,21 @@ public class L3List<T> implements L3Collection<T>{
 		 * donc le prmeier élément a avoir une valeur
 		 */
 		public L3ListIterator() {
-			// TODO: écrire le constructeur de L3ListIterator
+			this.current = flag.right;
 		}
 
 		/**
 		 * passe au pochain élément de la liste
 		 */
 		public void goForward() {
-			// TODO: écrire la méthode goForward()
+			this.current = current.right;
 		}
 
 		/**
 		 * passe a l'élément précédent de la liste
 		 */
 		public void goBackward() {
-			// TODO: écrire la méthode goBackward()
+			this.current = current.left;
 		}
 
 		/**
@@ -55,7 +55,7 @@ public class L3List<T> implements L3Collection<T>{
 		 */
 		@Override
 		public void restart() {
-			// TODO: écrire la méthode restart()
+			this.current = flag.right;
 		}
 
 		/**
@@ -63,8 +63,7 @@ public class L3List<T> implements L3Collection<T>{
 		 * @return true si l'élément courant est le flag, false sinon
 		 */
 		public boolean isOnFlag() {
-			// TODO: écrire la méthode isOnFlag
-			return false;
+			return (current == flag);
 		}
 
 		/**
@@ -72,7 +71,10 @@ public class L3List<T> implements L3Collection<T>{
 		 */
 		@Override
 		public void remove() {
-			// TODO: écrire la méthode remove()
+			this.current.left.right = current.right;
+			this.current.right.left = current.left;
+			this.current= current.right;
+
 		}
 
 		/**
@@ -81,8 +83,7 @@ public class L3List<T> implements L3Collection<T>{
 		 */
 		@Override
 		public T getValue() {
-			// TODO: écrire la méthode getValue()
-			return null;
+			return this.current.value;
 		}
 
 		/**
@@ -92,8 +93,8 @@ public class L3List<T> implements L3Collection<T>{
 		 */
 		@Override
 		public T nextValue() {
-			// TODO: écrire la méthode nextValue()
-			return null;
+			this.current = current.right;
+			return current.left.value;
 		}
 
 		/**
@@ -102,7 +103,15 @@ public class L3List<T> implements L3Collection<T>{
 		 * @param var1 élement à ajouter
 		 */
 		public void addLeft(T v) {
-			// TODO: écrire la méthode addLeft(value)
+			Element addElement = new Element();
+
+			addElement.value = v;
+
+			addElement.left = current.left;
+			addElement.right = current;
+
+			current.left.right = addElement;
+			current.left = addElement;
 		}
 
 		/**
@@ -111,7 +120,14 @@ public class L3List<T> implements L3Collection<T>{
 		 * @param var1 élement à ajouter
 		 */
 		public void addRight(T v) {
-			// TODO: écrire la méthode addRight(value)
+			Element addElement = new Element();
+			addElement.value = v;
+
+			addElement.left = current;
+			addElement.right = current.right;
+
+			current.right.left = addElement;
+			current.right = addElement;
 		}
 
 		/**
@@ -120,7 +136,7 @@ public class L3List<T> implements L3Collection<T>{
 		 * @param var1 valeur de l'élément à initialiser
 		 */
 		public void setValue(T v) {
-			// TODO: écrire la méthode setValue(value)
+			current.value = v;
 		}
 	}
 
@@ -128,7 +144,10 @@ public class L3List<T> implements L3Collection<T>{
 	 * Créer une nouvelle L3LinkedList avec uniquement un flag qui a comme left et right lui même
 	 */
 	public L3List() {
-		// TODO: écrire le constrcteur de L3List
+		this.flag = new Element();
+		this.flag.right = this.flag;
+		this.flag.left = this.flag;
+
 	}
 
 	/**
@@ -137,8 +156,7 @@ public class L3List<T> implements L3Collection<T>{
 	 * @return
 	 */
 	public L3ListIterator l3Iterator() {
-		// TODO: écrire la méthode l3Iterator
-		return null;
+		return new L3ListIterator();
 	}
 
 	/**
@@ -147,8 +165,7 @@ public class L3List<T> implements L3Collection<T>{
 	 * @return true si il y a seulement le flag
 	 */
 	public boolean isEmpty() {
-		// TODO: écrire la méthode isEmpty()
-		return false;
+		return (this.flag.right == flag && this.flag.left == flag);
 	}
 
 	/**
@@ -156,24 +173,43 @@ public class L3List<T> implements L3Collection<T>{
 	 * Réinitialise tous les itérateurs
 	 */
 	public void clear() {
-		// TODO: écrire la méthode clear()
+		this.flag.right = flag;
+		this.flag.left = flag;
+
+		this.l3Iterator().restart();
 	}
 
 	@Override
 	public boolean contains(T value) {
-		// TODO: écrire la méthode contains(value)
+		L3ListIterator it = this.l3Iterator();
+		it.restart();
+		while(!it.isOnFlag()) {
+			if(it.getValue() == value){ return true; }
+			it.goForward();
+		}
 		return false;
 	}
 
 	@Override
 	public void remove(T value) {
-			// TODO: écrire la méthode remove(value)
+		L3ListIterator it = this.l3Iterator();
+		it.restart();
+		while(!it.isOnFlag()) {
+			if(it.getValue() == value) {it.remove(); return;}
+			it.goForward();
 		}
+	}
 
 	@Override
 	public int size() {
-		// TODO: écrire la méthode size()
-		return -1;
+		L3ListIterator it = this.l3Iterator();
+		it.restart();
+		int compteur = 0;
+		while(!it.isOnFlag()) {
+			compteur++;
+			it.goForward();
+		}
+		return compteur;
 	}
 
 	/**
@@ -182,7 +218,14 @@ public class L3List<T> implements L3Collection<T>{
 	 * @param v élément à ajouter
 	 */
 	public void addHead(T v) {
-		// TODO: écrire la méthode addHead(value)
+		Element addElement = new Element();
+		addElement.value = v;
+		
+		addElement.right = this.flag.right;
+		addElement.left = this.flag;
+		
+		this.flag.right.left = addElement;
+		this.flag.right = addElement;
 	}
 
 	/**
@@ -191,7 +234,14 @@ public class L3List<T> implements L3Collection<T>{
 	 * @param v élément à ajouter
 	 */
 	public void addTail(T v) {
-		// TODO: écrire la méthode addTail(value)
+		Element addElement = new Element();
+		addElement.value = v;
+		
+		addElement.right = this.flag;
+		addElement.left = this.flag.left;
+		
+		this.flag.left.right = addElement;
+		this.flag.left = addElement;
 	}
 
 	/**
@@ -208,7 +258,7 @@ public class L3List<T> implements L3Collection<T>{
 	 * @param v
 	 */
 	public void setFlag(T v) {
-		// TODO: écrire la méthode setFlag(value)
+		this.flag.value = v;
 	}
 
 	@Override

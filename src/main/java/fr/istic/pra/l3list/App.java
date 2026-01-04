@@ -32,9 +32,9 @@ import fr.istic.pra.benchmark.BenchmarkAnyL3Collection;
 import fr.istic.pra.benchmark.BenchmarkData;
 import fr.istic.pra.benchmark.L3CollectionInteractions;
 import fr.istic.pra.lang.L3Iterator;
-import fr.istic.pra.list.util.L3List; // a commenter en partie 3.2
-// import fr.istic.pra.l3list.util.L3List; // a decommenter en partie 3.2
-import fr.istic.pra.list.SubSet;// a commenter en partie 3.2
+// import fr.istic.pra.list.util.L3List; // a commenter en partie 3.2
+import fr.istic.pra.l3list.util.L3List; // a decommenter en partie 3.2
+// import fr.istic.pra.list.SubSet;// a commenter en partie 3.2
 public class App extends JFrame{
 	private final static int MAX_SET = 5;
 	private ArrayList<MySet> l3SetList = new ArrayList<>(MAX_SET);

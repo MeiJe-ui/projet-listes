@@ -9,10 +9,10 @@ import org.junit.Test;
 import fr.istic.pra.benchmark.L3CollectionInteractions;
 import fr.istic.pra.l3list.MySet;
 import fr.istic.pra.lang.L3Iterator;
-// import fr.istic.pra.l3list.SmallSet; // a décommenter en partie 3.3
-// import fr.istic.pra.l3list.SubSet; // a décommenter en partie 3.2
-// import fr.istic.pra.l3list.util.L3List; // a décommenter en partie 3.2
-import fr.istic.pra.list.util.L3List; // a commenter en partie 3.2
+import fr.istic.pra.l3list.SmallSet; // a décommenter en partie 3.3
+import fr.istic.pra.l3list.SubSet; // a décommenter en partie 3.2
+import fr.istic.pra.l3list.util.L3List; // a décommenter en partie 3.2
+// import fr.istic.pra.list.util.L3List; // a commenter en partie 3.2
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

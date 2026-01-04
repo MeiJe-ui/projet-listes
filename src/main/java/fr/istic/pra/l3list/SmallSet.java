@@ -3,6 +3,7 @@ package fr.istic.pra.l3list;
 import java.util.Arrays;
 
 import fr.istic.pra.lang.L3Collection;
+import fr.istic.pra.lang.L3Iterator;
 
 
 public class SmallSet implements L3Collection<Integer> {
@@ -18,15 +19,38 @@ public class SmallSet implements L3Collection<Integer> {
 	private boolean[] tab = new boolean[SET_SIZE];
 
 	public SmallSet() {
-		// TODO: écrire le constructeur de SmallSet
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			tab[i] = false;
+		}
 	}
 
 	public SmallSet(boolean[] array) {
-		// TODO: écrire le constructeur de SmallSet avec un tableau
+		int i;
+
+		if(array.length > SET_SIZE){
+			for(i = 0 ; i < SET_SIZE ; i++){
+				tab[i] = array[i];
+			}
+			return;
+		}
+
+		if(array.length < SET_SIZE) {
+			for( i = array.length; i < SET_SIZE ; i++) {
+				tab[i] = false;
+			}
+			return;
+		}
+
+		for( i = 0 ; i < array.length ; i++) {
+			tab[i] = array[i];
+		}
+
 	}
 
 	public SmallSet(SmallSet set) {
-		// TODO: écrire le constructeur de copie d'un SmallSet
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			tab[i] = set.tab[i];
+		}
 	}
 
 	/**
@@ -34,8 +58,11 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public int size() {
-		// TODO: écrire la méthode size()
-		return -1;
+		int compteur = 0 ;
+		for (boolean b : tab) {
+			if(b) {compteur++;}
+		}
+		return compteur;
 	}
 
 	/**
@@ -44,8 +71,13 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public boolean contains(Integer x) {
-		// TODO: écrire la méthode contains(x)
-		return false;
+		
+		if(x > SET_SIZE || x <0) {return false;}
+		
+		else{
+			return tab[x];
+		}
+
 	}
 
 	/**
@@ -53,8 +85,12 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public boolean isEmpty() {
-		// TODO: écrire la méthode isEmpty()
-		return false;
+		
+		for (boolean b : tab) {
+			if(b) {return false;}
+		}
+
+		return true;
 	}
 
 	/**
@@ -65,7 +101,10 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void add(Integer x) {
-		// TODO: écrire la méthode add(x)
+		if( x<0 || x > 255) {
+			return;
+		}
+		tab[x] = true;
 	}
 
 	/**
@@ -76,7 +115,10 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void remove(Integer x) {
-		// TODO: écrire la méthode remove(x)
+		if( x<0 || x > 255) {
+			return;
+		}
+		tab[x] = false;
 	}
 
 	/**
@@ -87,7 +129,12 @@ public class SmallSet implements L3Collection<Integer> {
 	 * @pre 0 <= begin <= end <= 255
 	 */
 	public void addInterval(int deb, int fin) {
-		// TODO: écrire la méthode addInterval(deb, fin)
+		if(deb < 0 || fin > 255 || deb > fin) {
+			return;
+		}
+		for(int i = deb; i<=fin ; i++) {
+			tab[i] = true;
+		}
 	}
 
 	/**
@@ -98,7 +145,12 @@ public class SmallSet implements L3Collection<Integer> {
 	 * @pre 0 <= begin <= end <= 255
 	 */
 	public void removeInterval(int deb, int fin) {
-		// TODO: écrire la méthode removeInterval
+		if(deb < 0 || fin > 255 || deb > fin) {
+			return;
+		}
+		for(int i = deb; i<=fin ; i++) {
+			tab[i] = false;
+		}
 	}
 
 	/**
@@ -108,7 +160,12 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void union(L3Collection<Integer> set2) {
-		// TODO: écrire la méthode union(set)
+
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			if(set2.contains(i)){
+				this.tab[i] = true;
+			}
+		}
 	}
 
 	/**
@@ -118,7 +175,15 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void intersection(L3Collection<Integer> set2) {
-		// TODO: écrire la méthode intersection(set)
+		
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			if(set2.contains(i) && this.tab[i]){
+				this.tab[i] = true;
+			}
+			else{
+				this.tab[i] = false;
+			}
+		}
 	}
 
 	/**
@@ -128,7 +193,11 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void difference(L3Collection<Integer> set2) {
-		// TODO: écrire la méthode difference(set)
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			if(set2.contains(i)){
+				this.tab[i] = false;
+			}
+		}
 	}
 
 	/**
@@ -138,14 +207,24 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void symmetricDifference(L3Collection<Integer> set2) {
-		// TODO: écrire la méthode symetricDifference(set)
+		SmallSet tabSave = this;
+		this.union(set2);
+		tabSave.intersection(set2);
+		this.difference(tabSave);	
 	}
 
 	/**
 	 * this devient le complément de this.
 	 */
 	public void complement() {
-		// TODO: écrire la méthode complement()
+		for(int i =0 ; i < SET_SIZE ; i++) {
+			if(this.tab[i]) {
+				this.tab[i] = false;
+			}
+			else {
+				this.tab[i] = true;
+			}
+		}
 	}
 
 	/**
@@ -153,7 +232,9 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public void clear() {
-		// TODO: écrire la méthode clear()
+		for(int i=0 ; i < SET_SIZE ; i++) {
+			this.tab[i] = false;
+		}
 	}
 
 	/**
@@ -162,8 +243,12 @@ public class SmallSet implements L3Collection<Integer> {
 	 */
 	@Override
 	public boolean isIncludedIn(L3Collection<Integer> set2) {
-		// TODO: écrire la méthode isIncludedIn(set)
-		return false;
+		for(int i = 0 ; i < SET_SIZE ; i++) {
+			if(tab[i] && !set2.contains(i)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

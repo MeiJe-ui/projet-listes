@@ -1,9 +1,12 @@
 package fr.istic.pra.l3list;
 
-// import fr.istic.pra.l3list.util.L3List; // a décommenter en partie 3.2
-import fr.istic.pra.list.util.L3List; // a commenté en partie 3.2
-import fr.istic.pra.list.SmallSet; // a commenté en partie 3.3
-import fr.istic.pra.list.SubSet; // a commenté en partie 3.2
+import fr.istic.pra.l3list.util.L3List; // a décommenter en partie 3.2
+//import fr.istic.pra.list.util.L3List; // a commenté en partie 3.2
+//import fr.istic.pra.list.SmallSet; // a commenté en partie 3.3
+// import fr.istic.pra.list.SubSet; // a commenté en partie 3.2
+
+import java.lang.Character.Subset;
+
 import fr.istic.pra.lang.L3Collection;
 import fr.istic.pra.lang.L3Iterator;
 
@@ -34,8 +37,19 @@ public class MySet extends L3List<SubSet>  {
 	 * @return true si valeur appartient à l'ensemble, false sinon
 	 */
 	public boolean contains(int value) {
-		// TODO: écrire la methode contains(value)
-		return false;
+		int rank = value/SmallSet.SET_SIZE;
+		int modulo = value%SmallSet.SET_SIZE;
+		
+		SmallSet smallSetMod = new SmallSet();
+		smallSetMod.add(modulo); 
+		SubSet subsetVerif = new SubSet(rank, smallSetMod);
+		
+		if(contains(subsetVerif)){
+			return it.getValue().getSet().contains(modulo);
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -45,8 +59,22 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public boolean contains(SubSet set) {
-		// TODO: écrire la méthode contains(subset)
-		return false;
+		int rankSet = set.getRank();
+		it.restart();
+		it.goBackward();
+		it.goBackward();
+		if(it.getValue().getRank() < rankSet ){
+			return false;
+		}
+		else{
+			while(it.getValue().getRank() != rankSet) {
+				if(it.isOnFlag()){
+					return false;
+				}
+				it.goBackward();
+			}
+			return true;
+		}
 	}
 
 	/**
@@ -55,7 +83,13 @@ public class MySet extends L3List<SubSet>  {
 	 * @param value valuer à ajouter.
 	 */
 	public void add(int value) {
-		// TODO: écrire la méthode add(value)
+		int rank = value/SmallSet.SET_SIZE;
+		int modulo = value%SmallSet.SET_SIZE;
+		SmallSet smallSetAdd = new SmallSet();
+		smallSetAdd.addInterval(modulo,modulo);
+
+		SubSet subAdd = new SubSet(rank,smallSetAdd);
+		add(subAdd);
 	}
 
 	/**
@@ -63,7 +97,26 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public void add(SubSet subset) {
-		// TODO: écrire la méthode add(subset)
+		int rank = subset.getRank();
+		if(rank > MAX_RANG) {
+			System.out.println("erreur rang > MAX_RANG");
+			return;
+		}
+
+		it.restart();
+
+		while(it.getValue().getRank() < rank) {
+			if(it.isOnFlag()){
+				break;
+			}
+			it.goForward();
+		}
+		if(it.getValue().getRank() == rank) {
+			it.getValue().getSet().union(subset.getSet());
+		}
+		else {
+			it.addLeft(subset);
+		}
 	}
 
 	/**
@@ -72,12 +125,33 @@ public class MySet extends L3List<SubSet>  {
 	 * @param element valeur à supprimer
 	 */
 	public void remove(int value) {
-		// TODO: écrire la méthode remove(value)
+		int rank = value/SmallSet.SET_SIZE;
+		int modulo = value%SmallSet.SET_SIZE;
+		it.restart();
+		while(it.getValue().getRank() != rank) {
+			if(it.isOnFlag()){
+				return;	
+			}
+			it.goForward();
+		}
+		it.getValue().getSet().remove(modulo);
+		if(it.getValue().getSet().isEmpty()) {
+			it.remove();
+		}
 	}
 
 	@Override
 	public void remove(SubSet subset) {
-		// TODO: écrire la méthode remove(subset)
+		int rankSet = subset.getRank();
+		it.restart();
+		while(it.getValue().getRank() != rankSet) {
+			if(it.isOnFlag()){
+				return;	
+			}
+			it.goForward();
+		}
+		it.remove();
+		
 	}
 
 	/**
@@ -85,8 +159,13 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public int size() {
-		// TODO: écrire la méthode size()
-		return -1;
+		int sizeMylist=0;
+		it.restart();
+		while(!it.isOnFlag()) {
+			sizeMylist += it.getValue().getSet().size();
+			it.goForward();
+		}
+		return sizeMylist;
 	}
 
 	/**
@@ -95,8 +174,33 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public boolean isIncludedIn(L3Collection<SubSet> set2) {
-		// TODO: écrire la méthode isIncludedIn(set)
-		return false;
+		L3Iterator<SubSet> it2 = set2.l3Iterator();
+		it.restart();
+		it2.restart();
+
+		while(! it.isOnFlag()) {
+			
+			if(it2.getValue().getRank() < it.getValue().getRank()){
+				
+				do{
+					it2.goForward();
+				} while(it2.getValue().getRank() < it.getValue().getRank());
+			}
+			
+			if(it.getValue().getRank() == it2.getValue().getRank()) {
+				if( ! it.getValue().getSet().isIncludedIn(it2.getValue().getSet()) ) {
+					return false;
+				}
+				it.goForward();
+			}
+
+			if(it2.getValue().getRank() > it.getValue().getRank()) {
+				return false;
+			}
+
+		}
+
+		return true;
 	}
 
 	// -------------------------------------------------------------------------- //
@@ -110,7 +214,36 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public void difference(L3Collection<SubSet> otherSet) {
-		// TODO: écrire la méthode difference(set)
+		L3Iterator<SubSet> it2 = otherSet.l3Iterator();
+		it.restart();
+		it2.restart();
+
+		while(!(it.isOnFlag() || it2.isOnFlag())){
+			
+			int rankSet1 = it.getValue().getRank();
+			int rankSet2 = it2.getValue().getRank();
+
+			if(rankSet2 < rankSet1) {
+				it2.goForward();
+			}
+
+			if(rankSet1 < rankSet2) {
+				it.goForward();
+			}
+
+			if(rankSet1 == rankSet2) {
+				it.getValue().getSet().difference(it2.getValue().getSet());
+				
+				if(it.getValue().getSet().isEmpty()) {
+					this.remove(it.getValue());
+					it.goBackward();
+				}
+				
+				it.goForward();
+			}
+
+		}
+
 	}
 
 	/**
@@ -120,7 +253,41 @@ public class MySet extends L3List<SubSet>  {
 	 */
 	@Override
 	public void intersection(L3Collection<SubSet> otherSet) {
-		// TODO: écrire la méthode intersection(set)
+		L3Iterator<SubSet> it2 = otherSet.l3Iterator();
+		it.restart();
+		it2.restart();
+
+		while(!(it.isOnFlag())){
+			
+			int rankSet1 = it.getValue().getRank();
+			int rankSet2 = it2.getValue().getRank();
+
+			
+			if(rankSet2 < rankSet1) {
+				it2.goForward();
+			}
+
+			if(it2.isOnFlag()) {
+				do {
+					it.remove();
+				}while(!(it.isOnFlag()));
+				return;
+			}
+			
+			if(rankSet1 < rankSet2) {
+				it.remove();
+			}
+
+			if(rankSet1 == rankSet2) {
+				it.getValue().getSet().intersection(it2.getValue().getSet());
+				if(it.getValue().getSet().isEmpty()) {
+					it.remove();
+					it.goBackward();
+				}
+				it.goForward();
+			}
+
+		}
 	}
 
 	// -------------------------------------------------------------------------- //

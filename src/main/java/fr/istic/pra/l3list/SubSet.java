@@ -1,6 +1,6 @@
 package fr.istic.pra.l3list;
 
-import fr.istic.pra.list.SmallSet; // a décommenté en partie 3.2 et a commenté en partie 3.3
+//import fr.istic.pra.list.SmallSet; // a décommenté en partie 3.2 et a commenté en partie 3.3
 
 public class SubSet implements Comparable<SubSet> {
 
