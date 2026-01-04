@@ -1,20 +1,35 @@
-# TP Liste
+# Projet Listes – Java
 
-Ce TP est enseigné dans le cadre du cours de **PR**ogrammation **A**vancé en troisième année de licence à l'ISTIC.  
-Le sujet de ce TP est disponible sur la page moodle du cours ou [ici](./tp_listes_2025.pdf).  
+## 📌 Présentation
+Ce projet est un TP universitaire réalisé en Java dans le cadre du cours de Programmation Avancée (Licence 3 – ISTIC, Université Rennes 1).
 
-## Récuperation du projet
+L’objectif du projet est d’implémenter et manipuler des structures de données de type listes chaînées, en respectant des contraintes de conception et de robustesse.
 
-Pour récupérer le projet il suffit de le cloner sur votre machine avec la commande :
-``` bash
-git clone https://gitlab2.istic.univ-rennes1.fr/pra/tp-listes.git
-```
-Puis de l'ouvrir avec l'IDE de votre choix :
-- **VSCode** (recommandé): File > Open Folder... > [*votre dossier de travail*]/tp_list
-- **Eclipse**: File > Import... > Maven > Existing Maven Projectsn > Browse... > [*votre dossier de travail*]/tp_list > Finish
+Ce dépôt a été nettoyé, documenté et restructuré dans un objectif de présentation professionnelle (portfolio / recherche de stage).
 
-## Utilisation du projet
-Vous disposez d'une interface graphique pour manipuler les structures de données que vous dévelloperez dans ce projet.
-Pour la lancer vous devez:
-- **VSCode** : Ouvrir la classe [App.java](./src/main/java/fr/istic/pra/l3list/App.java) > cliquer sur "run" au dessus du `main` ligne 391 OU cliquer sur la flèche en haut a droite
-- **Eclipse**: Clique droit sur la classe [App.java](./src/main/java/fr/istic/pra/l3list/App.java) dans le Package Explorer > Run As > Java Application
+---
+
+## Compétences mises en œuvre
+- Programmation orientée objet en Java
+- Implémentation de structures de données
+- Manipulation de listes chaînées
+- Organisation d’un projet Java
+- Utilisation de Git et GitHub
+- Lecture et compréhension d’un code existant
+
+---
+
+## Fonctionnalités principales
+- Création et manipulation de listes chaînées
+- Ajout, suppression et parcours d’éléments
+
+---
+
+## Exécution
+Le projet peut être exécuté en lançant la classe `App.java` située dans `src/main/java/fr/istic/pra/l3list/`.
+
+---
+
+## Auteur
+Mei Je  
+Étudiante en informatique – Recherche de stage
